@@ -15,7 +15,7 @@
     "@tanstack/react-form": "^1.15.2",
     "axios": "^1.6.0",
     "zod": "^3.21.4",
-    "@tanstack/zod-adapter": "^0.1.0"
+    "@tanstack/zod-adapter": "^1.1.0"
   },
   "devDependencies": {
     "typescript": "^5.3.0",
