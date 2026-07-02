@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import {
   handleGetCustomer,
   handleGetCustomers,
-} from "../queries/get-client/GetClientHandler";
+} from "../queries/get-customer/GetCustomerHandler";
 
 const router = Router();
 
