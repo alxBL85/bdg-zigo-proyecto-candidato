@@ -1,7 +1,8 @@
-import { Pool } from 'pg';
+import { Pool } from "pg";
+import { env } from "../config/env";
 
 export const db = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/orders',
+  connectionString: env.databaseUrl,
 });
 
 export const query = (text: string, params?: any[]) => db.query(text, params);
