@@ -3,6 +3,7 @@ import {
   handleGetCustomer,
   handleGetCustomers,
 } from "../queries/get-customer/GetCustomerHandler";
+import { handleGetCustomerOrders } from "../queries/get-customer-orders/GetCustomerOrdersHandler";
 
 const router = Router();
 
@@ -26,6 +27,19 @@ router.get("/:id", async (req: Request, res: Response) => {
     if (!customer) return res.status(404).json({ error: "Customer Not found" });
 
     res.json(customer);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get("/:id/orders", async (req: Request, res: Response) => {
+  try {
+    const customerOrders = await handleGetCustomerOrders(req.params.id);
+
+    if (!customerOrders)
+      return res.status(404).json({ error: "Customer Orders Not found" });
+
+    res.json(customerOrders);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

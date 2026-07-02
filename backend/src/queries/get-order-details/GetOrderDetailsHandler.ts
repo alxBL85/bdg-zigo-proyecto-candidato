@@ -12,7 +12,7 @@ function mapDetailOrder(row: any): OrderDetail {
 
 export async function handleGetOrderDetails(
   orderId: string,
-): Promise<OrderDetail[] | null | undefined> {
+): Promise<OrderDetail[] | undefined> {
   const details = await query(
     `SELECT oi.product_id, 
 	   oi.quantity, 

@@ -1,13 +1,5 @@
 import { query } from "../../shared/db";
-import { Customer } from "../../shared/types/Customer";
-
-function mapCustomer(row: any): Customer {
-  return {
-    id: row.id,
-    name: row.name,
-    email: row.email,
-  } as Customer;
-}
+import { Customer, mapCustomer } from "../../shared/types/Customer";
 
 export async function handleGetCustomers(): Promise<Customer[] | null> {
   const result = await query(`SELECT id, email, name FROM customers `);
