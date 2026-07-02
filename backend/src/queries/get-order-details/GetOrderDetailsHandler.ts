@@ -13,9 +13,8 @@ function mapDetailOrder(row: any): OrderDetail {
 export async function handleGetOrderDetails(
   orderId: string,
 ): Promise<OrderDetail[] | null | undefined> {
-  try {
-    const details = await query(
-      `SELECT oi.product_id, 
+  const details = await query(
+    `SELECT oi.product_id, 
 	   oi.quantity, 
 	   oi.unit_price, 
 	   p.sku, 
@@ -23,11 +22,7 @@ export async function handleGetOrderDetails(
 	   FROM order_items oi
       INNER JOIN products p on oi.product_id = p.id
       WHERE order_id = $1`,
-      [orderId],
-    );
-    return details?.rows?.map(mapDetailOrder) || null;
-  } catch (error) {
-    console.log(">>> ", error);
-    return null;
-  }
+    [orderId],
+  );
+  return details?.rows?.map(mapDetailOrder) || null;
 }
