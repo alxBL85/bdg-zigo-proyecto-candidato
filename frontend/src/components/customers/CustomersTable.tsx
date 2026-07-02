@@ -4,7 +4,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
+import { Link } from "react-router-dom";
 import type { Customer } from "../../types/customer";
 
 interface Props {
@@ -20,13 +20,23 @@ const columns = [
   }),
 
   columnHelper.accessor("name", {
-    header: "Name",
+    header: "Nombre",
     cell: (info) => info.getValue(),
   }),
 
   columnHelper.accessor("email", {
     header: "Email",
     cell: (info) => info.getValue(),
+  }),
+
+  columnHelper.display({
+    id: "orders",
+    header: "Órdenes",
+    cell: (info) => {
+      const customer = info.row.original;
+
+      return <Link to={`/customers/${customer.id}/orders`}>Ver Órdenes</Link>;
+    },
   }),
 ];
 

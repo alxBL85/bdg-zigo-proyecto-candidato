@@ -5,6 +5,7 @@ import HomePage from "../pages/HomePage";
 import CustomersPage from "../pages/CustomersPage";
 import OrdersPage from "../pages/OrdersPage";
 import ProductsPage from "../pages/ProductsPage";
+import CustomerOrdersPage from "../pages/CustomersOrdersPage";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
         path: "customers",
         element: <CustomersPage />,
       },
+      { path: "customers/:id/orders", element: <CustomerOrdersPage /> },
       {
         path: "orders",
         element: <OrdersPage />,
