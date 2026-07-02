@@ -20,18 +20,6 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:id", async (req: Request, res: Response) => {
-  try {
-    const customer = await handleGetCustomer(req.params.id);
-
-    if (!customer) return res.status(404).json({ error: "Customer Not found" });
-
-    res.json(customer);
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 router.get("/:id/orders", async (req: Request, res: Response) => {
   try {
     const customerOrders = await handleGetCustomerOrders(req.params.id);
@@ -40,6 +28,18 @@ router.get("/:id/orders", async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Customer Orders Not found" });
 
     res.json(customerOrders);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get("/:id", async (req: Request, res: Response) => {
+  try {
+    const customer = await handleGetCustomer(req.params.id);
+
+    if (!customer) return res.status(404).json({ error: "Customer Not found" });
+
+    res.json(customer);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
