@@ -1,10 +1,14 @@
-export interface Order {
+export type OrderStatus = "DRAFT" | "CONFIRMED" | "CANCELLED";
+export interface OrderHeader {
   id: string;
   customerId: string;
-  items: OrderItem[];
+  status: OrderStatus;
   total: number;
-  status: 'DRAFT' | 'CONFIRMED' | 'CANCELLED';
   notes?: string;
+}
+
+export interface Order extends OrderHeader {
+  items: OrderItem[];
 }
 
 export interface OrderItem {
