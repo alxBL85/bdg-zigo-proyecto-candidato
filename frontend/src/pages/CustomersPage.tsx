@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import CustomersTable from "../components/customers/CustomersTable";
 import { useCustomers } from "../hooks/useCustomers";
 
@@ -11,6 +12,14 @@ export default function CustomersPage() {
   return (
     <div>
       <h1>Clientes</h1>
+      <nav
+        style={{
+          display: "flex",
+          gap: "1rem",
+        }}
+      >
+        <Link to="/customers/new">Agregar</Link>
+      </nav>
 
       <CustomersTable data={customers ?? []} />
     </div>

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import CustomersOrderTable from "../components/orders/CustomerOrdersTable";
 import { useCustomerOrders } from "../hooks/useCustomerOrders";
 
@@ -18,6 +18,14 @@ export default function CustomerOrdersPage() {
   return (
     <div>
       <h1>Órdenes del Cliente {id}</h1>
+      <nav
+        style={{
+          display: "flex",
+          gap: "1rem",
+        }}
+      >
+        <Link to={`/customers/${id}/orders/new`}>Agregar</Link>
+      </nav>
 
       <CustomersOrderTable data={customerOrders ?? []} />
     </div>
