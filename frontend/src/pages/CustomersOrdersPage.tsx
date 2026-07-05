@@ -1,15 +1,21 @@
-import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import CreateOrderModal from "../components/orders/CreateOrderModal";
 import CustomersOrderTable from "../components/orders/CustomerOrdersTable";
 import { useCustomerOrders } from "../hooks/useCustomerOrders";
 
 export default function CustomerOrdersPage() {
   const { id } = useParams();
+  const customerId = id ?? "";
+
   const {
     data: customerOrders,
     isLoading,
     isError,
     error,
-  } = useCustomerOrders(id ?? "");
+  } = useCustomerOrders(customerId);
+
+  const [openModal, setOpenModal] = useState(false);
 
   if (isLoading) return <p>Cargando Órdenes ...</p>;
 
@@ -18,16 +24,25 @@ export default function CustomerOrdersPage() {
   return (
     <div>
       <h1>Órdenes del Cliente {id}</h1>
-      <nav
+      <div
         style={{
           display: "flex",
-          gap: "1rem",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "1rem",
         }}
       >
-        <Link to={`/customers/${id}/orders/new`}>Agregar</Link>
-      </nav>
+        <button onClick={() => setOpenModal(true)}>Agregar Orden</button>
+      </div>
 
       <CustomersOrderTable data={customerOrders ?? []} />
+
+      {openModal && (
+        <CreateOrderModal
+          customerId={customerId}
+          onClose={() => setOpenModal(false)}
+        />
+      )}
     </div>
   );
 }
