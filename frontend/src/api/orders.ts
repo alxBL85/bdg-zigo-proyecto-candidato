@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Order, CreateOrderPayload, Product } from '../types/order';
 
-const api = axios.create({ baseURL: import.meta.env.VITE_API_URL || 'http://localhost:4000' });
+const api = axios.create({ baseURL: import.meta.env.VITE_API_URL || '/api' });
 
 export const fetchOrder = async (id: string): Promise<Order> => {
   const { data } = await api.get(`/orders/${id}`);
