@@ -7,23 +7,25 @@ import { env } from "../../config/env";
 const INVENTORY_SERVICE_URL = env.inventoryUrl || "http://inventory:3000";
 
 export async function handleCreateOrder(cmd: CreateOrderCommand) {
+  const requestedProductIds = cmd.items.map((i) => i.productId);
+
   const productResult = await query(
     `SELECT p.id,
        p.sku,
        p.name,
        p.unit_price,
        p.stock,
-       s.name AS supplier_name,
-       w.stock AS warehouse_stock
+       COALESCE(s.name, 'N/A') AS supplier_name,
+       COALESCE(w.stock, 0) AS warehouse_stock
     FROM products p
-    JOIN supplier_products sp ON sp.product_id = p.id AND sp.effective_to IS NULL
-    JOIN suppliers s ON s.id = sp.supplier_id
-    JOIN warehouse w ON w.product_id = p.id
+    LEFT JOIN supplier_products sp ON sp.product_id = p.id AND sp.effective_to IS NULL
+    LEFT JOIN suppliers s ON s.id = sp.supplier_id
+    LEFT JOIN warehouse w ON w.product_id = p.id
     WHERE p.id = ANY($1::uuid[])`,
-    [cmd.items.map((i) => i.productId)],
+    [requestedProductIds],
   );
 
-  if (productResult.rows.length !== cmd.items.length) {
+  if (productResult.rows.length !== new Set(requestedProductIds).size) {
     throw new Error("One or more products not found");
   }
 
@@ -35,8 +37,8 @@ export async function handleCreateOrder(cmd: CreateOrderCommand) {
     }
   }
 
-  const stockCheck = await axios.get(`${INVENTORY_SERVICE_URL}/stock/check`, {
-    data: { items: cmd.items },
+  const stockCheck = await axios.post(`${INVENTORY_SERVICE_URL}/stock/check`, {
+    items: cmd.items,
   });
 
   if (!stockCheck.data.success) {

@@ -3,7 +3,7 @@ import { handleCheckStock } from "../queries/check-stock/CheckStockHandler";
 
 const router = Router();
 
-router.get("/check", async (req: Request, res: Response) => {
+router.post("/check", async (req: Request, res: Response) => {
   try {
     const items = Array.isArray(req.body?.items) ? req.body.items : [];
     const result = await handleCheckStock(items);
