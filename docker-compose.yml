@@ -1,0 +1,58 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: rescate-db
+    environment:
+      POSTGRES_DB: orders_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - private
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/initdb:/docker-entrypoint-initdb.d
+      - ./database:/db-scripts
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d orders_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: rescate-backend
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/orders_db
+      INVENTORY_SERVICE_URL: http://inventory-service:4001
+    networks:
+      - private
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: rescate-frontend
+    environment:
+      VITE_API_URL: /api
+      VITE_API_PROXY_TARGET: http://backend:4000
+    ports:
+      - "3000:3000"
+    networks:
+      - private
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  private:
+    driver: bridge
+
+volumes:
+  postgres_data:
