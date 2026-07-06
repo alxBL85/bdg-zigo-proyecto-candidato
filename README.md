@@ -32,11 +32,36 @@ rescate-proyecto/
 - `KNOWN_ISSUES.md` — notas viejas del equipo
 - `FINANCIAL_RULES.md` — IVA y totales
 
+## Arranque con Docker Compose
+
+Desde la raíz del proyecto:
+
+```bash
+docker compose up --build
+```
+
+Esto construye y levanta los servicios de base de datos, backend y frontend. Una vez iniciados, puede abrir:
+
+- Frontend: http://localhost:3000
+- Backend: disponible internamente en el puerto 4000 para los servicios del compose
+
+Para detenerlos:
+
+```bash
+docker compose down
+```
+
+Si quiere limpiar también los volúmenes de la base de datos:
+
+```bash
+docker compose down -v
+```
+
 ## Arranque local
 
 ```bash
 createdb orders
-psql -d orders -f database/schema.sql
+psql -d orders -f database/initdb/01-schema.sql
 cd backend && npm install && npm run dev
 cd frontend && npm install && npm run dev
 ```
